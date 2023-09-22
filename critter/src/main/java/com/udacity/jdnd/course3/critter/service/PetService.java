@@ -1,6 +1,5 @@
 package com.udacity.jdnd.course3.critter.service;
 
-import com.udacity.jdnd.course3.critter.config.OwnerNotFoundException;
 import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Pet;
 import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
@@ -25,6 +24,12 @@ public class PetService {
 //        return savedPet;
 //    }
 
+    /**
+     *
+     * @param pet
+     * @param ownerId Do the remaining work of converting petDTO.ownerId -> Pet.owner;
+     * @return
+     */
     public Pet savePet(Pet pet, long ownerId) {
         Customer owner = customerRepository.findById(ownerId).orElseThrow();
         pet.setOwner(owner);
@@ -34,7 +39,7 @@ public class PetService {
         return savedPet;
     }
 
-    public Pet getPet(long id) {
+    public Pet getPetById(long id) {
         return petRepository.findById(id).orElseThrow();
     }
 

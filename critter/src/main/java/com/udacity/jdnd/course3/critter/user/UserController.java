@@ -6,6 +6,7 @@ import com.udacity.jdnd.course3.critter.entity.Employee;
 import com.udacity.jdnd.course3.critter.entity.Pet;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
+import com.udacity.jdnd.course3.critter.service.PetService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,13 @@ import java.util.Set;
 public class UserController {
 
     final CustomerService customerService;
-
     final EmployeeService employeeService;
+    static PetService petService;
 
-    public UserController(CustomerService customerService, EmployeeService employeeService) {
+    public UserController(CustomerService customerService, EmployeeService employeeService, PetService petService) {
         this.customerService = customerService;
         this.employeeService = employeeService;
+        this.petService = petService;
     }
 
     @PostMapping("/customer")
@@ -63,7 +65,7 @@ public class UserController {
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        return convertEntityToEmployeeDTO(employeeService.getEmployee(employeeId));
+        return convertEntityToEmployeeDTO(employeeService.getEmployeeById(employeeId));
     }
 
     @PutMapping("/employee/{employeeId}")
@@ -84,10 +86,13 @@ public class UserController {
     private static CustomerDTO convertEntityToCustomerDTO(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);
+
         if(customer.getPets()!=null) {
             for (Pet pet : customer.getPets()) {
                 customerDTO.getPetIds().add(pet.getId());
             }
+            // an alternative
+//            customer.getPets().forEach(pet -> customerDTO.getPetIds().add(pet.getId()));
         }
 
         return customerDTO;
@@ -96,6 +101,10 @@ public class UserController {
     private static Customer convertCustomerDTOToEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDTO, customer);
+        if(customerDTO.getPetIds()!=null) {
+            customerDTO.getPetIds().forEach(
+                    id -> customer.getPets().add(petService.getPetById(id)));
+        }
         return customer;
     }
 

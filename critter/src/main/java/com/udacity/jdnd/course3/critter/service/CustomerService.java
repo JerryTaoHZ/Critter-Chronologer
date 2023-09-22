@@ -35,6 +35,7 @@ public class CustomerService {
 
     public Customer getOwnerByPet(long petId) {
         Optional<Pet> pet = petRepository.findById(petId);
+
         if(pet.isPresent()) {
             Customer owner = pet.get().getOwner();
             return owner;

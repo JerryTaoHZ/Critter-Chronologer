@@ -22,7 +22,7 @@ public class Employee {
     private String name;
 
     @ManyToMany(mappedBy = "employees")
-    private List<Schedule> schedule;
+    private List<Schedule> schedules;
 
     @ElementCollection
     private Set<EmployeeSkill> skills;

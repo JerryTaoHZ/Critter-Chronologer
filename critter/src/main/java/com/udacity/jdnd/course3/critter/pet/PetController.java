@@ -1,9 +1,7 @@
 package com.udacity.jdnd.course3.critter.pet;
 
-import com.udacity.jdnd.course3.critter.entity.Customer;
 import com.udacity.jdnd.course3.critter.entity.Pet;
 import com.udacity.jdnd.course3.critter.service.PetService;
-import com.udacity.jdnd.course3.critter.user.CustomerDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +23,14 @@ public class PetController {
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        Pet savedPet = petService.savePet(convertPetDTOToEntity(petDTO), petDTO.getOwnerId());
+        Pet savedPet = petService.savePet(convertPetDTOToEntity(petDTO),
+                petDTO.getOwnerId()); // the 2nd field make the conversion complete!
         return convertEntityToPetDTO(savedPet);
     }
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        Pet pet = petService.getPet(petId);
+        Pet pet = petService.getPetById(petId);
         return convertEntityToPetDTO(pet);
     }
 
@@ -62,7 +61,7 @@ public class PetController {
         return petDTO;
     }
 
-    private static Pet convertPetDTOToEntity(PetDTO petDTO) {
+    private Pet convertPetDTOToEntity(PetDTO petDTO) {
         Pet pet = new Pet();
         BeanUtils.copyProperties(petDTO, pet);
         return pet;

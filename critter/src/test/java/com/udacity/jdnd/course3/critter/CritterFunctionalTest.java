@@ -191,17 +191,17 @@ public class CritterFunctionalTest {
         PetDTO petDTO = petController.savePet(petTemp);
 
         LocalDate date = LocalDate.of(2019, 12, 25);
-        List<Long> petList = Lists.newArrayList(petDTO.getId());
-        List<Long> employeeList = Lists.newArrayList(employeeDTO.getId());
+        List<Long> petIdsList = Lists.newArrayList(petDTO.getId());
+        List<Long> employeeIdsList = Lists.newArrayList(employeeDTO.getId());
         Set<EmployeeSkill> skillSet =  Sets.newHashSet(EmployeeSkill.PETTING);
 
-        scheduleController.createSchedule(createScheduleDTO(petList, employeeList, date, skillSet));
+        scheduleController.createSchedule(createScheduleDTO(petIdsList, employeeIdsList, date, skillSet));
         ScheduleDTO scheduleDTO = scheduleController.getAllSchedules().get(0);
 
-        Assertions.assertEquals(scheduleDTO.getActivities(), skillSet);
-        Assertions.assertEquals(scheduleDTO.getDate(), date);
-        Assertions.assertEquals(scheduleDTO.getEmployeeIds(), employeeList);
-        Assertions.assertEquals(scheduleDTO.getPetIds(), petList);
+        Assertions.assertEquals(skillSet, scheduleDTO.getActivities());
+        Assertions.assertEquals(date, scheduleDTO.getDate());
+        Assertions.assertEquals(employeeIdsList, scheduleDTO.getEmployeeIds());
+        Assertions.assertEquals(petIdsList, scheduleDTO.getPetIds());
     }
 
     @Test
