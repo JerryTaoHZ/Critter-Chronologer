@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @PutMapping("/employee/{employeeId}")
-    public Set<DayOfWeek> setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
+    public Employee setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
         return employeeService.setAvailability(daysAvailable, employeeId);
     }
 

@@ -33,10 +33,10 @@ public class EmployeeService {
         return employeeRepository.findById(id).orElseThrow();
     }
 
-    public Set<DayOfWeek> setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
+    public Employee setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         employee.setDaysAvailable(daysAvailable);
-        return employee.getDaysAvailable();
+        return employee;
     }
 
     public List<Employee> findEmployeesForService0(EmployeeRequestDTO er) {
@@ -56,7 +56,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findEmployeesForService(EmployeeRequestDTO er) {
-        List<Employee> filtering = employeeRepository.getByDaysAvailableContaining(er.getDate().getDayOfWeek());
+        List<Employee> filtering = employeeRepository.findAllByDaysAvailableContaining(er.getDate().getDayOfWeek());
         return filtering.stream().filter(e -> e.getSkills().containsAll(er.getSkills())).collect(Collectors.toList());
     }
 
