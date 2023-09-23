@@ -10,6 +10,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -32,26 +33,31 @@ public class EmployeeService {
         return employeeRepository.findById(id).orElseThrow();
     }
 
-    public void setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
+    public Set<DayOfWeek> setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         employee.setDaysAvailable(daysAvailable);
-
+        return employee.getDaysAvailable();
     }
 
-    public List<Employee> findEmployeesForService(EmployeeRequestDTO er) {
+    public List<Employee> findEmployeesForService0(EmployeeRequestDTO er) {
         List<Employee> matches = new ArrayList<>();
         List<Employee> all = employeeRepository.findAll();
         Set<EmployeeSkill> skills = er.getSkills();
         for (Employee employee : all) {
             boolean flag = true;
-            for (EmployeeSkill skill : skills) {
-                if(!employee.getSkills().contains(skill)) flag = false;
-            }
+//            for (EmployeeSkill skill : skills) {
+//                if(!employee.getSkills().contains(skill)) flag = false;
+//            }
+            if(employee.getSkills().containsAll(skills)) flag = false;
             if (!employee.getDaysAvailable().contains(er.getDate().getDayOfWeek()) ) flag = false;
             if(flag) matches.add(employee);
         }
         return matches;
     }
 
+    public List<Employee> findEmployeesForService(EmployeeRequestDTO er) {
+        List<Employee> filtering = employeeRepository.getByDaysAvailableContaining(er.getDate().getDayOfWeek());
+        return filtering.stream().filter(e -> e.getSkills().containsAll(er.getSkills())).collect(Collectors.toList());
+    }
 
 }
