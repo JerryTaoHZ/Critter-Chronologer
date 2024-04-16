@@ -34,8 +34,9 @@ public class EmployeeService {
     }
 
     public Employee setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
-        employee.setDaysAvailable(daysAvailable);
+        Employee employee0 = employeeRepository.findById(employeeId).orElseThrow();
+        employee0.setDaysAvailable(daysAvailable);
+        Employee employee = employeeRepository.save(employee0);
         return employee;
     }
 

@@ -63,7 +63,7 @@ public class UserController {
         return convertEntityToEmployeeDTO(savedEmployee);
     }
 
-    @PostMapping("/employee/{employeeId}")
+    @GetMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
         return convertEntityToEmployeeDTO(employeeService.getEmployeeById(employeeId));
     }
